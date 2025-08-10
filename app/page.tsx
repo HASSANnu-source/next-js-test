@@ -6,42 +6,42 @@ const products = [
     title: "Book 1",
     description: "Book 1 description",
     price: 30,
-    image: "book.webp"
+    image: "/images/book.webp"
   },
   {
     id: 2,
     title: "Book 2",
     description: "Book 2 description",
     price: 40,
-    image: "book.webp"
+    image: "/images/book2.jpg"
   },
   {
     id: 3,
     title: "Book 3",
     description: "Book 3 description",
     price: 50,
-    image: "book.webp"
+    image: "/images/book.webp"
   },
   {
     id: 4,
     title: "Book 4",
     description: "Book 4 description",
     price: 60,
-    image: "book.webp"
+    image: "/images/book2.jpg"
   },
   {
     id: 5,
     title: "Book 5",
     description: "Book 5 description",
     price: 70,
-    image: "book.webp"
+    image: "/images/book.webp"
   },
   {
     id: 6,
     title: "Book 6",
     description: "Book 6 description",
     price: 80,
-    image: "book.webp"
+    image: "/images/book2.jpg"
   }
 ];
 

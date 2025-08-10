@@ -1,69 +1,84 @@
 'use client';
 
+import Image from 'next/image';
 import { useCart } from './context/CartContext';
-import { useState } from 'react';
 
 export default function ProductCard({ product }) {
-  const { addToCart } = useCart();
-  const [isAdding, setIsAdding] = useState(false);
+  const { addToCart, cartItems, decreaseQuantity } = useCart();
 
-  const handleAddToCart = async () => {
-    setIsAdding(true);
+  const cartItem = cartItems.find(item => item.id === product.id);
+  const quantityInCart = cartItem ? cartItem.quantity : 0;
+
+  const handleAddToCart = () => {
     addToCart(product);
-    
-    setTimeout(() => {
-      setIsAdding(false);
-    }, 300);
+  };
+
+  const handleDecrease = () => {
+    if (quantityInCart > 0) {
+      decreaseQuantity(product.id);
+    }
   };
 
   return (
     <div className="bg-gray-800 rounded-xl shadow-lg overflow-hidden transition-all duration-300 hover:shadow-xl hover:-translate-y-1 border border-gray-700">
-      <div className="relative overflow-hidden">
-        <img 
-          src={product.image} 
-          alt={product.title} 
-          className="w-full h-48 object-cover transition-transform duration-500 hover:scale-105"
+      <div className="relative w-full" style={{ aspectRatio: '1/1', maxHeight: '300px' }}>
+        <Image
+          src={product.image}
+          alt={product.title}
+          fill
+          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 300px"
+          priority={false}
+          style={{ 
+            objectFit: 'cover',
+          }}
+          className="transition-transform duration-500 hover:scale-105"
         />
-        <div className="absolute top-2 right-2 bg-black/80 backdrop-blur-sm rounded-full px-2 py-1 text-xs font-medium text-white">
-          ${product.price}
-        </div>
       </div>
 
       <div className="p-4">
-        <h3 className="text-lg font-bold text-white mb-2 line-clamp-1">{product.title}</h3>
+        <div className="flex justify-between items-start mb-2">
+          <h3 className="text-lg font-bold text-white line-clamp-1">{product.title}</h3>
+          <div className="bg-blue-900 backdrop-blur-sm rounded-full px-4 py-1 text-lg font-medium text-white whitespace-nowrap">
+            ${product.price}
+          </div>
+        </div>
         <p className="text-gray-300 text-sm mb-4 line-clamp-2 h-12">{product.description}</p>
-        
-        <button 
-          onClick={handleAddToCart}
-          disabled={isAdding}
-          className={`
-            w-full py-3 px-4 rounded-lg font-semibold transition-all duration-300
-            flex items-center justify-center gap-2
-            ${isAdding 
-              ? 'bg-green-600 text-white' 
-              : 'bg-blue-600 hover:bg-blue-700 text-white hover:shadow-lg'
-            }
-            disabled:opacity-70 disabled:cursor-not-allowed
-            transform hover:scale-105 active:scale-95
-          `}
-        >
-          {isAdding ? (
-            <>
-              <svg className="w-5 h-5 animate-spin" fill="none" viewBox="0 0 24 24">
-                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+
+        {quantityInCart > 0 ? (
+          <div className="flex items-center gap-2">
+            <button 
+              onClick={handleDecrease}
+              className="bg-gray-600 hover:bg-gray-500 text-white w-10 h-10 rounded-lg flex items-center justify-center transition-colors active:scale-95"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
+                <path fillRule="evenodd" d="M5 10a1 1 0 011-1h8a1 1 0 110 2H6a1 1 0 01-1-1z" clipRule="evenodd" />
               </svg>
-              Added!
-            </>
-          ) : (
-            <>
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                <path fillRule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clipRule="evenodd" />
+            </button>
+            
+            <span className="text-white font-semibold flex-1 text-center">
+              {quantityInCart}
+            </span>
+            
+            <button 
+              onClick={handleAddToCart}
+              className="bg-blue-600 hover:bg-blue-700 text-white w-10 h-10 rounded-lg flex items-center justify-center transition-colors active:scale-95"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
+                <path fillRule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clipRule="evenodd" />
               </svg>
-              Add to Cart
-            </>
-          )}
-        </button>
+            </button>
+          </div>
+        ) : (
+          <button 
+            onClick={handleAddToCart}
+            className="w-full py-3 px-4 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-semibold transition-all duration-300 flex items-center justify-center gap-2 transform hover:scale-105 active:scale-95"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+              <path fillRule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clipRule="evenodd" />
+            </svg>
+            Add to Cart
+          </button>
+        )}
       </div>
     </div>
   );
