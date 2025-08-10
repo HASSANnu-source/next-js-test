@@ -1,8 +1,6 @@
-import Cart from '../components/Cart';
+'use client';
 
-export const metadata = {
-  title: 'Cart',
-};
+import Cart from '../components/Cart';
 
 export default function CartPage() {
   return (
