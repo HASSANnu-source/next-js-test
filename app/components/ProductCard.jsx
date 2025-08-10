@@ -1,6 +1,5 @@
 'use client';
 
-import Image from 'next/image';
 import { useCart } from './context/CartContext';
 
 export default function ProductCard({ product }) {
@@ -22,16 +21,13 @@ export default function ProductCard({ product }) {
   return (
     <div className="bg-gray-800 rounded-xl shadow-lg overflow-hidden transition-all duration-300 hover:shadow-xl hover:-translate-y-1 border border-gray-700">
       <div className="relative w-full" style={{ aspectRatio: '1/1', maxHeight: '300px' }}>
-        <Image
+        <img
           src={product.image}
           alt={product.title}
-          fill
-          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 300px"
-          priority={false}
-          style={{ 
-            objectFit: 'cover',
+          className="w-full h-full object-cover transition-transform duration-500 hover:scale-105"
+          onError={(e) => {
+            e.currentTarget.src = 'https://placehold.co/300x300/4B5563/FFFFFF?text=No+Image';
           }}
-          className="transition-transform duration-500 hover:scale-105"
         />
       </div>
 
